@@ -1,7 +1,8 @@
 package lightcycles;
 
-import lightcycles.Shaders.*;
-import lightcycles.Input.*;
+import lightcycles.entities.*;
+import lightcycles.gfx.*;
+import lightcycles.input.*;
 
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
@@ -10,9 +11,6 @@ import org.lwjgl.opengl.*;
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;	//	these imports are important to access certain OpenGL methods
-import static org.lwjgl.opengl.GL15.*;	//
-import static org.lwjgl.opengl.GL20.*;	//
-import static org.lwjgl.opengl.GL30.*;	//
 import static org.lwjgl.system.MemoryUtil.*;
 
 public class Game {
@@ -24,14 +22,12 @@ public class Game {
 	private GLFWKeyCallback keyCallback;	//	InputHandler
 	
 	private Shader ourProgram;	//	Shader Program
-	private int VAO, VBO;		//	Vertex Array Object, Vertex Buffer Object
-	private float[] vertices;	//	Vertex attributes of graphics
 	
-	private int currdirection;
+	private Player player;
 
 	public void run() {
 		System.out.println("Hello LWJGL " + Version.getVersion() + "!");
-
+		
 		try {
 			init();	//	Initialize GLFW and OpenGL context
 			loop();	//	Game loop
@@ -45,33 +41,10 @@ public class Game {
 			glfwSetErrorCallback(null).free();
 		}
 	}
-	
+	/*
 	private void createGraphics() {
-	    //  Set up vertex data (and buffer(s)) and attribute pointers
-	    vertices = new float[] {
-	        -0.25f, -0.25f, 0.0f, //  Left
-	         0.25f, -0.25f, 0.0f, //  Right
-	         0.0f,   0.25f, 0.0f  //  Top
-	    };
-		
-		VAO = glGenVertexArrays();
-		VBO = glGenBuffers();
-		//	Bind the Vertex Array Object first, then bind and set vertex buffer(s) and attribute pointer(s)
-		glBindVertexArray(VAO);
-		
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
-		
-		glVertexAttribPointer(0, 3, GL_FLOAT, false, 3 * ((Float.SIZE) / 8), 0);
-		glEnableVertexAttribArray(0);
-		
-	    //  Note that this is allowed, the call to glVertexAttribPointer registered VBO as the currently bound vertex buffer object so afterwards we can safely unbind
-		//glBindBuffer(GL_ARRAY_BUFFER, 0);
-		
-		//  Unbind VAO (it's always a good thing to unbind any buffer/array to prevent strange bugs)
-		glBindVertexArray(0);
 	}
-	
+	*/
 	private void init() {
 		// Setup an error callback. The default implementation
 		// will print the error message in System.err.
@@ -110,59 +83,20 @@ public class Game {
 		
 		//	Build and compile our shader program
 		ourProgram = new Shader(
-				"PATH_TO/shader.vs",
-				"PATH_TO/shader.frag"
+				"/Users/oshovalgas/Documents/java_workspace/git/LightCycles/src/lightcycles/gfx/shader.vs",
+				"/Users/oshovalgas/Documents/java_workspace/git/LightCycles/src/lightcycles/gfx/shader.frag"
 				);
-		createGraphics();
+		//createGraphics();
 		
-		// player direction
-		currdirection = 0;	//	SOUTH
-		
-		//	0	SOUTH
-		//	1	NORTH
-		//	2	LEFT
-		//	3	RIGHT
+		player = new Player();
 	}
 	
-	// UPDATES (INPUT SO FAR)
+	// UPDATES (PLAYER & INPUT SO FAR)
 	private void update() {
-		if (KeyboardHandler.isKeyDown(GLFW_KEY_LEFT) && currdirection != 3)
-			currdirection = 2;
-		
-		if (KeyboardHandler.isKeyDown(GLFW_KEY_RIGHT) && currdirection != 2)
-			currdirection = 3;
-		
-		if (KeyboardHandler.isKeyDown(GLFW_KEY_DOWN) && currdirection != 1)
-			currdirection = 0;
-		
-		if (KeyboardHandler.isKeyDown(GLFW_KEY_UP) && currdirection != 0)
-			currdirection = 1;
+		player.update();
 		
 		if (KeyboardHandler.isKeyDown(GLFW_KEY_ESCAPE))
 			glfwSetWindowShouldClose(window, true);
-		
-		switch (currdirection) {
-			case 0:	//	SOUTH
-				for (int i = 1; i < vertices.length; i += 3)
-					vertices[i] -= 0.01f;	//	CHANGES SPEED
-				break;
-			case 1:	//	NORTH
-				for (int i = 1; i < vertices.length; i += 3)
-					vertices[i] += 0.01f;
-				break;
-			case 2:	//	WEST
-				for (int i = 0; i < vertices.length; i += 3)
-					vertices[i] -= 0.01f;
-				break;
-			case 3:	//	EAST
-				for (int i = 0; i < vertices.length; i += 3)
-					vertices[i] += 0.01f;
-				break;
-		}
-		
-		glBindVertexArray(VAO);
-		glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
-		glBindVertexArray(0);
 	}
 	
 	private void loop() {
@@ -179,16 +113,14 @@ public class Game {
 	        
 	        //  Draw our triangle
 	        ourProgram.use();
-	        glBindVertexArray(VAO);
-	        glDrawArrays(GL_TRIANGLES, 0, 3);
-	        glBindVertexArray(0);
+	        
+	        player.render();
 	        
 	        //  Swap the screen buffers
 	        glfwSwapBuffers(window);
 		}
 		//  Properly de-allocate all resources once they've outlived their purpose
-		glDeleteVertexArrays(VAO);
-		glDeleteBuffers(VBO);
+		player.delete();
 	}
 
 	public static void main(String[] args) {
