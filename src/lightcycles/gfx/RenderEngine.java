@@ -2,10 +2,7 @@ package lightcycles.gfx;
 
 import lightcycles.entities.Bike;
 
-import static org.lwjgl.opengl.GL11.*;	//	these imports are important to access certain OpenGL methods
-import static org.lwjgl.opengl.GL15.*;	//
 import static org.lwjgl.opengl.GL20.*;	//
-import static org.lwjgl.opengl.GL30.*;	//
 
 import java.util.HashMap;
 import java.util.Map;

@@ -5,8 +5,6 @@ import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 
-import lightcycles.util.BufferUtil;
-
 public class VertexArray {
 	private int VAO, VBO, EBO;
 	
@@ -18,7 +16,6 @@ public class VertexArray {
 		glBindVertexArray(VAO);
 		
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		//glBufferData(GL_ARRAY_BUFFER, BufferUtil.createFloatBuffer(vertices), GL_STATIC_DRAW);
 		glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
 		//	Position
 		glVertexAttribPointer(0, 3, GL_FLOAT, false, 5 * (Float.SIZE / 8), 0);
@@ -28,7 +25,6 @@ public class VertexArray {
 		glEnableVertexAttribArray(1);
 		
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-		//glBufferData(GL_ELEMENT_ARRAY_BUFFER, BufferUtil.createByteBuffer(indices), GL_STATIC_DRAW);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW);
 		
 		glBindVertexArray(0);

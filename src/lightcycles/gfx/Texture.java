@@ -7,7 +7,6 @@ import java.io.IOException;
 import org.newdawn.slick.opengl.*;
 
 import static org.lwjgl.opengl.GL11.*;	//	these imports are important to access certain OpenGL methods
-import static org.lwjgl.opengl.GL12.*;	//
 import static org.lwjgl.opengl.GL30.*;	//
 
 public class Texture {
