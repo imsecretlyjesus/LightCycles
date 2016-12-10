@@ -21,9 +21,10 @@ public class Game {
 	
 	private GLFWKeyCallback keyCallback;	//	InputHandler
 	
-	private Shader ourProgram;	//	Shader Program
-	
 	private Player player;
+	private Enemy enemy;
+	
+	private boolean paused = false;
 
 	public void run() {
 		System.out.println("Hello LWJGL " + Version.getVersion() + "!");
@@ -41,10 +42,7 @@ public class Game {
 			glfwSetErrorCallback(null).free();
 		}
 	}
-	/*
-	private void createGraphics() {
-	}
-	*/
+	
 	private void init() {
 		// Setup an error callback. The default implementation
 		// will print the error message in System.err.
@@ -79,48 +77,69 @@ public class Game {
 		//	Set the required callback function
 		glfwSetKeyCallback(window, keyCallback = new KeyboardHandler());
 		
-		glViewport(0, 0, WIDTH, HEIGHT);
+		int[] width = new int[1], height = new int[1];
+		glfwGetFramebufferSize(window, width, height);
+		glViewport(0, 0, width[0], height[0]);
 		
-		//	Build and compile our shader program
-		ourProgram = new Shader(
-				"/Users/oshovalgas/Documents/java_workspace/git/LightCycles/src/lightcycles/gfx/shader.vs",
-				"/Users/oshovalgas/Documents/java_workspace/git/LightCycles/src/lightcycles/gfx/shader.frag"
+		//	Configure rendering shaders for each object
+		RenderEngine.configShader(
+				player = new Player(),
+				"src/lightcycles/gfx/shaders/bike.vs",
+				"src/lightcycles/gfx/shaders/bike.frag"
 				);
-		//createGraphics();
-		
-		player = new Player();
+		RenderEngine.configShader(
+				enemy = new Enemy(),
+				"src/lightcycles/gfx/shaders/bike.vs",
+				"src/lightcycles/gfx/shaders/bike.frag"
+				);
 	}
 	
-	// UPDATES (PLAYER & INPUT SO FAR)
+	/**
+	 *	Updates all articles on the screen. <br>
+	 *	<tab>
+	 *	<ul>
+	 *		<li>GLFW Events</li>
+	 *		<li>Keyboard Input</li>
+	 *		<li>Movement</li>
+	 *	</ul>
+	 *	@author オショ
+	 */
 	private void update() {
-		player.update();
+		//  Check if any events have been activated (key pressed, mouse moved etc.) and call corresponding response functions
+		glfwPollEvents();
+		if (!paused) {
+			player.update();
+			enemy.update();
+		}
 		
 		if (KeyboardHandler.isKeyDown(GLFW_KEY_ESCAPE))
 			glfwSetWindowShouldClose(window, true);
+		if (KeyboardHandler.isKeyDown(GLFW_KEY_ENTER))
+			paused = true;
+	}
+	
+	private void render() {
+        //  Clear the colorbuffer
+        glClear(GL_COLOR_BUFFER_BIT);
+        
+        RenderEngine.render();
+        
+        //  Swap the screen buffers
+        glfwSwapBuffers(window);
 	}
 	
 	private void loop() {
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		
 		//  Game loop
 		while (!glfwWindowShouldClose(window)) {
-	        //  Check if any events have been activated (key pressed, mouse moved etc.) and call corresponding response functions
-	        glfwPollEvents();
 	        update();
-	        
-	        //  Render
-	        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-	        //  Clear the colorbuffer
-	        glClear(GL_COLOR_BUFFER_BIT);
-	        
-	        //  Draw our triangle
-	        ourProgram.use();
-	        
-	        player.render();
-	        
-	        //  Swap the screen buffers
-	        glfwSwapBuffers(window);
+	        render();
 		}
 		//  Properly de-allocate all resources once they've outlived their purpose
 		player.delete();
+		enemy.delete();
+		RenderEngine.delete();
 	}
 
 	public static void main(String[] args) {
