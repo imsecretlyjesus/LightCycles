@@ -1,8 +1,9 @@
 package lightcycles.entities;
 
 public class Enemy extends Bike {
+
 	public Enemy() {
-		super("path_to/enemy.png");		//	CHANGE FILE PATH
+		super("res/enemy.png");		//	CHANGE FILE PATH
 	}
 	
 	//	random movement must be implemented -- AI

@@ -1,58 +1,43 @@
 package lightcycles.gfx;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
-import static org.lwjgl.opengl.GL20.*;	//
+import lightcycles.math.Matrix4f;
+import lightcycles.util.ShaderUtil;
+
+import static org.lwjgl.opengl.GL20.*;
 
 public class Shader {
-	private int Program;
+	private final int Program;
+	private Map<String,Integer> locationCache = new HashMap<String,Integer>();
 	
 	public Shader(String vertexPath, String fragmentPath) {
-		try {
-			String vShaderCode = readFile(
-					vertexPath,
-					Charset.forName("US-ASCII")
-					);
-			String fShaderCode = readFile(
-					fragmentPath,
-					Charset.forName("US-ASCII")
-					);
-			
-			int vertex = glCreateShader(GL_VERTEX_SHADER);
-			glShaderSource(vertex, vShaderCode);
-			glCompileShader(vertex);
-			
-			int fragment = glCreateShader(GL_FRAGMENT_SHADER);
-			glShaderSource(fragment, fShaderCode);
-			glCompileShader(fragment);
-			
-			this.Program = glCreateProgram();
-			glAttachShader(this.Program, vertex);
-			glAttachShader(this.Program, fragment);
-			glLinkProgram(this.Program);
-			
-			glDeleteShader(vertex);
-			glDeleteShader(fragment);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Program = ShaderUtil.createProgram(vertexPath, fragmentPath);
 	}
 	
-	public int getProgram() {
-		return this.Program;
+	private int getUniform(String name) {
+		if (locationCache.containsKey(name))
+			return locationCache.get(name);
+		
+		int result = glGetUniformLocation(this.Program, name);
+		if (result == -1)
+			System.err.println("Could not find uniform variable '" + name + "'!");
+		else
+			locationCache.put(name, result);
+		
+		return result;
+	}
+	
+	public void setUniformMatrix4fv(String name, Matrix4f matrix) {
+		glUniformMatrix4fv(getUniform(name), false, matrix.toFloatBuffer());
+	}
+	
+	public void delete() {
+		glDeleteProgram(this.Program);
 	}
 	
 	public void use() {
 		glUseProgram(this.Program);
-	}
-	
-	private static String readFile(String path, Charset encoding) 
-			throws IOException {
-		byte[] encoded = Files.readAllBytes(Paths.get(path));
-		return new String(encoded, encoding);
 	}
 }
