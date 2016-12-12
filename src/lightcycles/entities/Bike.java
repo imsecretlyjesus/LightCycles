@@ -15,16 +15,20 @@ public abstract class Bike {
 	protected int currdirection;
 	protected float angle;
 	
-	private final static int WIDTH = 300, HEIGHT = 300;
+	protected final static int WIDTH = 512, HEIGHT = 512;
 	private final static Vector3f SIZE = new Vector3f(WIDTH, HEIGHT, 1);
 	
 	public Bike() {
-		//	Generic
-		this("res/bike.png");
+		this(0, 0);
 	}
 	
-	public Bike(String path) {
-		position = new Vector3f();
+	public Bike(int x, int y) {
+		//	Generic
+		this("res/bike.png", x, y);
+	}
+	
+	public Bike(String path, int x, int y) {
+		position = new Vector3f(x, y, 0);
 		
 		float[] vertices = new float[] {
 				//	Position	//	Texture Coord
@@ -48,6 +52,14 @@ public abstract class Bike {
 	public void delete() {
 		texture.delete();
 		mesh.delete();
+	}
+	
+	public int getX() {
+		return (int)position.x;
+	}
+	
+	public int getY() {
+		return (int)position.y;
 	}
 	
 	public int getWidth() {
@@ -84,10 +96,10 @@ public abstract class Bike {
 				angle = 180.0f;
 				break;
 			case 2:
-				angle = 270.0f;
+				angle = 90.0f;
 				break;
 			case 3:
-				angle = 90.0f;
+				angle = 270.0f;
 				break;
 		}
 		

@@ -2,13 +2,20 @@ package lightcycles.entities;
 
 import java.util.Random;
 
+import lightcycles.Game;
+
 public class Enemy extends Bike {
 	private Random random = new Random();
 	private long elapseTime;
 	private long lastTime;
-
+	private boolean go_[];
+	
 	public Enemy() {
-		super("res/crate-wood.png");		//	CHANGE FILE PATH
+		this(0,0);
+	}
+	
+	public Enemy(int x, int y) {
+		super("res/crate-wood.png", x, y);		//	CHANGE FILE PATH
 		elapseTime = random.nextInt(1500) + 500;
 		lastTime = System.currentTimeMillis();
 	}

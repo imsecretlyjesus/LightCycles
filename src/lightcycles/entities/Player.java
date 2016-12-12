@@ -6,7 +6,12 @@ import lightcycles.input.KeyboardHandler;
 
 public class Player extends Bike {
 	public Player() {
-		super("res/crate-wood.png");	//	CHANGE FILE PATH
+		this(0, 0);
+	}
+	
+	public Player(int x, int y) {
+		super("res/crate-wood.png", x, y);	//	CHANGE FILE PATH
+		speed = 0.1f;
 	}
 	
 	public void update() {

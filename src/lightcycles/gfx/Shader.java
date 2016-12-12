@@ -29,6 +29,10 @@ public class Shader {
 		return result;
 	}
 	
+	public void setUniform1f(String name, float value) {
+		glUniform1f(getUniform(name), value);
+	}
+	
 	public void setUniformMatrix4fv(String name, Matrix4f matrix) {
 		glUniformMatrix4fv(getUniform(name), false, matrix.toFloatBuffer());
 	}
