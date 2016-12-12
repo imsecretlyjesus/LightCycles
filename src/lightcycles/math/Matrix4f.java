@@ -32,6 +32,16 @@ public class Matrix4f {
 		return result;
 	}
 	
+	public static Matrix4f scale(Vector3f vector) {
+		Matrix4f result = new Matrix4f();
+		
+		result.matrices[0]  = vector.x;
+		result.matrices[5]  = vector.y;
+		result.matrices[10] = vector.z;
+		
+		return result;
+	}
+	
 	public static Matrix4f translate(Vector3f vector) {
 		Matrix4f result = new Matrix4f();
 		

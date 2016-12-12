@@ -17,12 +17,9 @@ public class VertexArray {
 		
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
-		//	Position
-		glVertexAttribPointer(0, 3, GL_FLOAT, false, 5 * (Float.SIZE / 8), 0);
+		//	Position & Texture Coordinates
+		glVertexAttribPointer(0, 4, GL_FLOAT, false, 0, 0);
 		glEnableVertexAttribArray(0);
-		//	Texture
-		glVertexAttribPointer(1, 2, GL_FLOAT, false, 5 * (Float.SIZE / 8), 3 * (Float.SIZE / 8));
-		glEnableVertexAttribArray(1);
 		
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW);
