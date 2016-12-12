@@ -13,6 +13,10 @@ public abstract class Bike {
 	//	BIKE FEATURES
 	protected float speed;
 	protected int currdirection;
+	protected float angle;
+	
+	private final static int WIDTH = 300, HEIGHT = 300;
+	private final static Vector3f SIZE = new Vector3f(WIDTH, HEIGHT, 1);
 	
 	public Bike() {
 		//	Generic
@@ -24,10 +28,10 @@ public abstract class Bike {
 		
 		float[] vertices = new float[] {
 				//	Position	//	Texture Coord
-				 0.25f,  0.25f, 0.0f, 1.0f, 1.0f,	//	Top	Right
-				 0.25f, -0.25f, 0.0f, 1.0f, 0.0f,	//	Bottom Right
-				-0.25f, -0.25f, 0.0f, 0.0f, 0.0f,	//	Bottom Left
-				-0.25f,  0.25f, 0.0f, 0.0f, 1.0f	//	Top	Left
+				 0.0f, 0.0f, 0.0f, 1.0f,	//	Top	Left
+				 1.0f, 0.0f, 1.0f, 1.0f,	//	Top Right
+				 1.0f, 1.0f, 1.0f, 0.0f,	//	Bottom Right
+				 0.0f, 1.0f, 0.0f, 0.0f		//	Bottom Left
 		};
 		int[] indices = new int[] {
 				0, 1, 3,
@@ -37,7 +41,7 @@ public abstract class Bike {
 		mesh = new VertexArray(vertices, indices);
 		texture = new Texture(path);
 		
-		speed = 0.005f;
+		speed = 1.0f;
 		currdirection = 0;
 	}
 	
@@ -46,13 +50,21 @@ public abstract class Bike {
 		mesh.delete();
 	}
 	
+	public int getWidth() {
+		return WIDTH;
+	}
+	
+	public int getHeight() {
+		return HEIGHT;
+	}
+	
 	private void move() {
 		switch (currdirection) {
 		case 0:	//	SOUTH
-			position.y -= speed;	//	CHANGES SPEED
+			position.y += speed;	//	CHANGES SPEED
 			break;
 		case 1:	//	NORTH
-			position.y += speed;
+			position.y -= speed;
 			break;
 		case 2:	//	WEST
 			position.x -= speed;
@@ -63,17 +75,35 @@ public abstract class Bike {
 		}
 	}
 	
-	public Vector3f getPosition() {
-		return position;
-	}
-	
 	public void update() {
+		switch(currdirection) {
+			case 0:
+				angle = 0.0f;
+				break;
+			case 1:
+				angle = 180.0f;
+				break;
+			case 2:
+				angle = 270.0f;
+				break;
+			case 3:
+				angle = 90.0f;
+				break;
+		}
+		
 		move();
 	}
 	
 	public void render() {
+		Matrix4f transform;
+		transform = Matrix4f.translate(position);;
+		transform = transform.multiply(Matrix4f.translate(new Vector3f(0.5f * SIZE.x, 0.5f * SIZE.y, 0.0f)));
+		transform = transform.multiply(Matrix4f.rotate(angle));
+		transform = transform.multiply(Matrix4f.translate(new Vector3f(-0.5f * SIZE.x, -0.5f * SIZE.y, 0.0f)));
+		transform = transform.multiply(Matrix4f.scale(SIZE));
+		
 		texture.bind();
-		RenderEngine.renderHashMap.get(this).setUniformMatrix4fv("ml_matrix", Matrix4f.translate(position));
+		RenderEngine.BIKE_SHADER.setUniformMatrix4fv("model", transform);
 		mesh.render();
 		texture.unbind();
 	}

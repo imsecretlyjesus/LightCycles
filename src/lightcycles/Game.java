@@ -3,6 +3,7 @@ package lightcycles;
 import lightcycles.entities.*;
 import lightcycles.gfx.*;
 import lightcycles.input.*;
+import lightcycles.math.Matrix4f;
 
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
@@ -25,7 +26,7 @@ public class Game {
 	private Enemy enemy;
 	
 	private boolean paused = false;
-
+	
 	public void run() {
 		System.out.println("Hello LWJGL " + Version.getVersion() + "!");
 		
@@ -84,14 +85,14 @@ public class Game {
 		//	Configure rendering shaders for each object
 		RenderEngine.configShader(
 				player = new Player(),
-				"src/lightcycles/gfx/shaders/bike.vs",
-				"src/lightcycles/gfx/shaders/bike.frag"
+				RenderEngine.BIKE_SHADER
 				);
 		RenderEngine.configShader(
 				enemy = new Enemy(),
-				"src/lightcycles/gfx/shaders/bike.vs",
-				"src/lightcycles/gfx/shaders/bike.frag"
+				RenderEngine.BIKE_SHADER
 				);
+		
+		RenderEngine.ortho = Matrix4f.orthographic(0, (float)WIDTH, (float)HEIGHT, 0, -1.0f, 1.0f);
 	}
 	
 	/**

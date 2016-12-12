@@ -1,6 +1,7 @@
 package lightcycles.gfx;
 
 import lightcycles.entities.Bike;
+import lightcycles.math.Matrix4f;
 
 import static org.lwjgl.opengl.GL20.*;	//
 
@@ -9,6 +10,12 @@ import java.util.Map;
 	
 public abstract class RenderEngine {
 	public static Map<Bike,Shader> renderHashMap = new HashMap<Bike,Shader>();
+	public static Matrix4f ortho;
+	
+	public static final Shader BIKE_SHADER = new Shader(
+			"src/lightcycles/gfx/shaders/bike.vs",
+			"src/lightcycles/gfx/shaders/bike.frag"
+			);
 	
 	public static void delete() {
 		//	delete all shaders
@@ -19,8 +26,12 @@ public abstract class RenderEngine {
 		renderHashMap.get(e).delete();
 	}
 	
+	/**
+	 * Renders all existing entities.
+	 */
 	public static void render() {
 		renderHashMap.forEach((k, v) -> {
+			v.setUniformMatrix4fv("projection", ortho);
 			v.use();
 			k.render();
 		});
@@ -33,7 +44,7 @@ public abstract class RenderEngine {
 		glUseProgram(0);
 	}
 	
-	public static void configShader(Bike e, String vertexPath, String fragmentPath) {
-		renderHashMap.put(e, new Shader(vertexPath, fragmentPath));
+	public static void configShader(Bike e, Shader shader) {
+		renderHashMap.put(e, shader);
 	}
 }
