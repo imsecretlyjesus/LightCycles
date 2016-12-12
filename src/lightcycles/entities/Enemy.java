@@ -89,8 +89,6 @@ public class Enemy extends Bike {
 		
 		super.update();
 		
-		
-		super.update();
 	}
 	
 	public void mover(){
