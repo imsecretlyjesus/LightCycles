@@ -62,7 +62,7 @@ public class Game {
 	    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
 		
 		//	Create a GLFWwindow object that we can use for GLFW's functions
-		window = glfwCreateWindow(WIDTH, HEIGHT, "Learn OpenGL", NULL, NULL);
+		window = glfwCreateWindow(WIDTH, HEIGHT, "Light Cycles", NULL, NULL);
 		if ( window == NULL )
 			throw new RuntimeException("Failed to create the GLFW window");
 		
@@ -88,7 +88,7 @@ public class Game {
 				RenderEngine.BIKE_SHADER
 				);
 		RenderEngine.configShader(
-				enemy = new Enemy(300, 300),
+				enemy = new Enemy(200, 200),
 				RenderEngine.BIKE_SHADER
 				);
 		
@@ -123,7 +123,7 @@ public class Game {
 			enemy.update();
 		}
 		//	check collision
-		System.out.println("Collision: " + CheckCollision(player, enemy));
+		//System.out.println("Collision: " + CheckCollision(player, enemy));
 		
 		if (KeyboardHandler.isKeyDown(GLFW_KEY_ESCAPE))
 			glfwSetWindowShouldClose(window, true);

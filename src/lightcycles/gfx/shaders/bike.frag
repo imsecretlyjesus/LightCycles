@@ -6,7 +6,7 @@ uniform sampler2D ourTexture;
 
 void main()
 {
-    color = texture(ourTexture, TexCoord);//  texture
+    color = texture(ourTexture, vec2(TexCoord.x, 1.0f - TexCoord.y));//  texture
     if (color.w < 1.0f)
         discard;
 }

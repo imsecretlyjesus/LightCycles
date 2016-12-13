@@ -36,7 +36,7 @@ public class Texture {
 		
 		//	image loaded
 		
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image.getTexWidth(), image.getTexHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, image.getImageBufferData());
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.getTexWidth(), image.getTexHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, image.getImageBufferData());
 		glGenerateMipmap(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, 0);	//	unbind texture
 	}
