@@ -29,6 +29,7 @@ public class Enemy extends Bike {
 			
 			elapseTime = random.nextInt(1500) + 500;
 			lastTime = System.currentTimeMillis();
+			changedDirection = true;
 		}
 		
 		super.update();

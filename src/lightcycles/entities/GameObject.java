@@ -18,7 +18,7 @@ public class GameObject {
 	}
 	
 	public GameObject(int x, int y) {
-		this("res/crate-wood.png", x, y);
+		this("res/box.png", x, y);
 	}
 	
 	public GameObject(String path, int x, int y) {

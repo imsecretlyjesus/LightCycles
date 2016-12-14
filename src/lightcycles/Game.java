@@ -120,7 +120,7 @@ public class Game {
 		glfwPollEvents();
 		if (!paused) {
 			player.update();
-			enemy.update();
+			//enemy.update();
 		}
 		//	check collision
 		//System.out.println("Collision: " + CheckCollision(player, enemy));
