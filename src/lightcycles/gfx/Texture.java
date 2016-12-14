@@ -17,14 +17,12 @@ public class Texture {
 		stbi_set_flip_vertically_on_load(true);
 		image = stbi_load(path, width, height, comp, 4);
 		
-		System.out.println("Width of image: " + width[0]);
-		System.out.println("Height of image: " + height[0]);
-		System.out.println("Channels: " + comp[0]);
-		
 		WIDTH = width[0];
 		HEIGHT = height[0];
 		
 		init();
+		
+		stbi_image_free(image);
 	}
 	
 	private void init() {
