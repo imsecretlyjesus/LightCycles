@@ -18,7 +18,7 @@ public class Game {
 	
 	//	The window handle
 	private long window;
-	private static final int WIDTH = 1300, HEIGHT = 900;
+	private static final int WIDTH = 800, HEIGHT = 600;
 	
 	private GLFWKeyCallback keyCallback;	//	InputHandler
 	
@@ -120,7 +120,7 @@ public class Game {
 		glfwPollEvents();
 		if (!paused) {
 			player.update();
-			//enemy.update();
+			enemy.update();
 		}
 		//	check collision
 		//System.out.println("Collision: " + CheckCollision(player, enemy));

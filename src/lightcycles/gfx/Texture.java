@@ -1,27 +1,30 @@
 package lightcycles.gfx;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-
-import org.newdawn.slick.opengl.*;
-
 import static org.lwjgl.opengl.GL11.*;	//	these imports are important to access certain OpenGL methods
 import static org.lwjgl.opengl.GL30.*;	//
+import static org.lwjgl.stb.STBImage.*;
+
+import java.nio.ByteBuffer;
 
 public class Texture {
 	private int texture;
-	private LoadableImageData image;
+	ByteBuffer image;
+	private final int WIDTH, HEIGHT;
 	
 	public Texture(String path) {
-		image = new PNGImageData();
-		try {
-			image.loadImage(new FileInputStream(new File(path)));
-			init();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		int[] width = new int[1], height = new int[1], comp = new int[1];
+		
+		stbi_set_flip_vertically_on_load(true);
+		image = stbi_load(path, width, height, comp, 4);
+		
+		System.out.println("Width of image: " + width[0]);
+		System.out.println("Height of image: " + height[0]);
+		System.out.println("Channels: " + comp[0]);
+		
+		WIDTH = width[0];
+		HEIGHT = height[0];
+		
+		init();
 	}
 	
 	private void init() {
@@ -36,7 +39,7 @@ public class Texture {
 		
 		//	image loaded
 		
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.getTexWidth(), image.getTexHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, image.getImageBufferData());
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, WIDTH, HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
 		glGenerateMipmap(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, 0);	//	unbind texture
 	}
