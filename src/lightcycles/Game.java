@@ -96,7 +96,7 @@ public class Game {
 	}
 	
 	//	BASIC COLLISION
-	private boolean CheckCollision(Bike player, Bike enemy) {
+	private boolean CheckCollision(GameObject one, GameObject two) {
 		boolean collision_x = player.getX() + player.getWidth() >= enemy.getX() &&
 		        enemy.getX() + enemy.getWidth() >= player.getX();
 		boolean collision_y = player.getY() + player.getHeight() >= enemy.getY() &&
@@ -120,10 +120,10 @@ public class Game {
 		glfwPollEvents();
 		if (!paused) {
 			player.update();
-			enemy.update();
+			//enemy.update();
 		}
 		//	check collision
-		//System.out.println("Collision: " + CheckCollision(player, enemy));
+		System.out.println("Collision: " + CheckCollision(player, enemy));
 		
 		if (KeyboardHandler.isKeyDown(GLFW_KEY_ESCAPE))
 			glfwSetWindowShouldClose(window, true);

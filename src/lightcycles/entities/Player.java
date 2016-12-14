@@ -11,6 +11,7 @@ public class Player extends Bike {
 	
 	public Player(int x, int y) {
 		super("res/blue_bike.png", x, y);
+		speed = 1.0f;
 	}
 	
 	public void update() {

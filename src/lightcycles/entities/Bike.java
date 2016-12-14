@@ -7,7 +7,8 @@ public abstract class Bike extends GameObject {
 	protected float speed;
 	protected int currdirection;
 	
-	protected final static int WIDTH = 23, HEIGHT = 50;
+	private static final int SCALE = 1;
+	protected static final int WIDTH = 23 * SCALE, HEIGHT = 50 * SCALE;
 	
 	protected boolean changedDirection;
 	protected LightCycle[] light_cycles;
@@ -15,17 +16,15 @@ public abstract class Bike extends GameObject {
 	
 	
 	public Bike() {
-		this("res/blue_bike.png", 0, 0);
+		this("res/box.png", 0, 0);
 	}
 	
 	public Bike(int x, int y) {
-		this("res/blue_bike.png", x, y);
+		this("res/box.png", x, y);
 	}
 	
-	public Bike(String path, int x, int y) {
-		super(path, x, y);
-		SIZE.x = (float)WIDTH;
-		SIZE.y = (float)HEIGHT;
+	protected Bike(String path, int x, int y) {
+		super(path, x, y, WIDTH, HEIGHT);
 		
 		speed = 2.0f;
 		currdirection = 0;

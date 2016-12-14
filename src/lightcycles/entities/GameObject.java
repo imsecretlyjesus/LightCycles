@@ -10,19 +10,25 @@ public class GameObject {
 	protected Texture texture;
 	protected VertexArray mesh;
 	protected Vector3f position;
-	protected Vector3f SIZE = new Vector3f(100, 100, 0); 
+	protected Vector3f SIZE;
 	protected float angle;
+	protected Matrix4f transform = new Matrix4f();
 	
 	public GameObject() {
 		this(0, 0);
 	}
 	
 	public GameObject(int x, int y) {
-		this("res/box.png", x, y);
+		this("res/box.png", x, y, 100, 100);
 	}
 	
 	public GameObject(String path, int x, int y) {
+		this(path, x, y, 100, 100);
+	}
+	
+	public GameObject(String path, int x, int y, int width, int height) {
 		position = new Vector3f(x, y, 0);
+		SIZE = new Vector3f(width, height, 0);
 		
 		float[] vertices = new float[] {
 				//	Position	//	Texture Coord
@@ -64,21 +70,14 @@ public class GameObject {
 	}
 	
 	public int getWidth() {
-		if (angle == 90 || angle == 270)
-			return (int)SIZE.y;
-		
 		return (int)SIZE.x;
 	}
 	
 	public int getHeight() {
-		if (angle == 90 || angle == 270)
-			return (int)SIZE.x;
-		
 		return (int)SIZE.y;
 	}
 	
 	public void render() {
-		Matrix4f transform;
 		transform = Matrix4f.translate(position);
 		transform = transform.multiply(Matrix4f.translate(new Vector3f(0.5f * SIZE.x, 0.5f * SIZE.y, 0.0f)));
 		transform = transform.multiply(Matrix4f.rotate(angle));
