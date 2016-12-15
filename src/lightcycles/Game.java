@@ -18,7 +18,7 @@ public class Game {
 	
 	//	The window handle
 	private long window;
-	private int WIDTH = 800, HEIGHT = 600;
+	private static final int WIDTH = 800, HEIGHT = 600;
 	
 	private GLFWKeyCallback keyCallback;	//	InputHandler
 	
@@ -62,7 +62,7 @@ public class Game {
 	    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
 		
 		//	Create a GLFWwindow object that we can use for GLFW's functions
-		window = glfwCreateWindow(WIDTH, HEIGHT, "Learn OpenGL", NULL, NULL);
+		window = glfwCreateWindow(WIDTH, HEIGHT, "Light Cycles", NULL, NULL);
 		if ( window == NULL )
 			throw new RuntimeException("Failed to create the GLFW window");
 		
@@ -88,11 +88,20 @@ public class Game {
 				RenderEngine.BIKE_SHADER
 				);
 		RenderEngine.configShader(
-				enemy = new Enemy(),
+				enemy = new Enemy(200, 200),
 				RenderEngine.BIKE_SHADER
 				);
 		
 		RenderEngine.ortho = Matrix4f.orthographic(0, (float)WIDTH, (float)HEIGHT, 0, -1.0f, 1.0f);
+	}
+	
+	//	BASIC COLLISION
+	private boolean checkCollision(GameObject one, GameObject two) {
+		boolean collision_x = player.getX() + player.getWidth() >= enemy.getX() &&
+		        enemy.getX() + enemy.getWidth() >= player.getX();
+		boolean collision_y = player.getY() + player.getHeight() >= enemy.getY() &&
+		        enemy.getY() + enemy.getHeight() >= player.getY();
+		return collision_x && collision_y;
 	}
 	
 	/**
@@ -102,6 +111,7 @@ public class Game {
 	 *		<li>GLFW Events</li>
 	 *		<li>Keyboard Input</li>
 	 *		<li>Movement</li>
+	 *		<li>Collision</li>
 	 *	</ul>
 	 *	@author オショ
 	 */
@@ -112,6 +122,8 @@ public class Game {
 			player.update();
 			enemy.update();
 		}
+		//	check collision
+		checkCollision(player, enemy);
 		
 		if (KeyboardHandler.isKeyDown(GLFW_KEY_ESCAPE))
 			glfwSetWindowShouldClose(window, true);

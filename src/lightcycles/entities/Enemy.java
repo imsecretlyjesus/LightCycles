@@ -6,10 +6,14 @@ public class Enemy extends Bike {
 	private Random random = new Random();
 	private long elapseTime;
 	private long lastTime;
-
+	
 	public Enemy() {
-		super("res/crate-wood.png");		//	CHANGE FILE PATH
-		elapseTime = random.nextInt(1500) + 500;
+		this(0,0);
+	}
+	
+	public Enemy(int x, int y) {
+		super("res/red_bike.png", x, y);
+		elapseTime = random.nextInt(2000) + 1500;
 		lastTime = System.currentTimeMillis();
 	}
 	
@@ -17,7 +21,6 @@ public class Enemy extends Bike {
 	public void update() {
 		//	implement AI here
 		//	...
-		
 		if (System.currentTimeMillis() - lastTime > elapseTime) {
 			if (currdirection == 0 || currdirection == 1)
 				currdirection = random.nextInt(2) + 2;
@@ -26,6 +29,7 @@ public class Enemy extends Bike {
 			
 			elapseTime = random.nextInt(1500) + 500;
 			lastTime = System.currentTimeMillis();
+			changedDirection = true;
 		}
 		
 		super.update();
