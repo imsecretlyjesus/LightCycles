@@ -13,7 +13,7 @@ public class Enemy extends Bike {
 	
 	public Enemy(int x, int y) {
 		super("res/red_bike.png", x, y);
-		elapseTime = random.nextInt(1500) + 500;
+		elapseTime = random.nextInt(2000) + 1500;
 		lastTime = System.currentTimeMillis();
 	}
 	

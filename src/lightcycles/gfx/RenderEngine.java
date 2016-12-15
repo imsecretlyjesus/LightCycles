@@ -1,7 +1,6 @@
 package lightcycles.gfx;
 
 import lightcycles.entities.GameObject;
-import lightcycles.entities.GameObject;
 import lightcycles.math.Matrix4f;
 
 import static org.lwjgl.opengl.GL20.*;	//
@@ -55,12 +54,14 @@ public abstract class RenderEngine {
 	 */
 	public static void render(GameObject gameObject) {
 		Shader shader = renderHashMap.get(gameObject);
-		
 		shader.setUniformMatrix4fv("projection", ortho);
 		shader.use();
+		Active_Shader = shader;
 		gameObject.render();
 		
 		glUseProgram(0);
+		
+		Active_Shader = null;
 	}
 	
 	/**

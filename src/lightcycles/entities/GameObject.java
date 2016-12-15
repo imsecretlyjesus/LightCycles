@@ -15,15 +15,15 @@ public class GameObject {
 	protected Matrix4f transform = new Matrix4f();
 	
 	public GameObject() {
-		this(0, 0);
+		this("res/box.png", 0, 0, 0, 0);
 	}
 	
 	public GameObject(int x, int y) {
-		this("res/box.png", x, y, 100, 100);
+		this("res/box.png", x, y, 0, 0);
 	}
 	
-	public GameObject(String path, int x, int y) {
-		this(path, x, y, 100, 100);
+	public GameObject(int x, int y, int width, int height) {
+		this("res/box.png", x, y, width, height);
 	}
 	
 	public GameObject(String path, int x, int y, int width, int height) {
@@ -78,10 +78,11 @@ public class GameObject {
 	}
 	
 	public void render() {
+		float pivot_y = SIZE.x / SIZE.y;
 		transform = Matrix4f.translate(position);
-		transform = transform.multiply(Matrix4f.translate(new Vector3f(0.5f * SIZE.x, 0.5f * SIZE.y, 0.0f)));
+		transform = transform.multiply(Matrix4f.translate(new Vector3f(0.5f * SIZE.x, pivot_y * SIZE.y, 0.0f)));
 		transform = transform.multiply(Matrix4f.rotate(angle));
-		transform = transform.multiply(Matrix4f.translate(new Vector3f(-0.5f * SIZE.x, -0.5f * SIZE.y, 0.0f)));
+		transform = transform.multiply(Matrix4f.translate(new Vector3f(-0.5f * SIZE.x, -pivot_y * SIZE.y, 0.0f)));
 		transform = transform.multiply(Matrix4f.scale(SIZE));
 		
 		texture.bind();
